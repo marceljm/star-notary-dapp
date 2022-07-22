@@ -70,31 +70,70 @@ it('lets user2 buy a star and decreases its balance in ether', async () => {
     const balanceOfUser2BeforeTransaction = await web3.eth.getBalance(user2);
     await instance.buyStar(starId, { from: user2, value: balance });
     const balanceAfterUser2BuysStar = await web3.eth.getBalance(user2);
-    let value = Number(balanceOfUser2BeforeTransaction) - Number(balanceAfterUser2BuysStar);
     assert.isAbove(Number(balanceOfUser2BeforeTransaction), Number(balanceAfterUser2BuysStar) + Number(starPrice));
 });
 
 // Implement Task 2 Add supporting unit tests
 
 it('can add the star name and star symbol properly', async () => {
+    let instance = await StarNotary.deployed();
+    let user = accounts[3];
+    let tokenId = 6;
+
     // 1. create a Star with different tokenId
-    //2. Call the name and symbol properties in your Smart Contract and compare with the name and symbol provided
+    await instance.createStar('Death Star', tokenId, { from: user });
+
+    //2. Call the name and symbol properties in your Smart Contract and compare with the name and symbol provided    
+    assert.equal(await instance.name(), 'StarToken');
+    assert.equal(await instance.symbol(), 'STOK');
 });
 
 it('lets 2 users exchange stars', async () => {
+    let instance = await StarNotary.deployed();
+    let user1 = accounts[4];
+    let user2 = accounts[5];
+    let tokenId1 = 7;
+    let tokenId2 = 8;
+
     // 1. create 2 Stars with different tokenId
+    await instance.createStar('Avlein', tokenId1, { from: user1 });
+    await instance.createStar('Flookt', tokenId2, { from: user2 });
+
     // 2. Call the exchangeStars functions implemented in the Smart Contract
+    await instance.approve(user1, tokenId2, { from: user2 });
+    await instance.exchangeStars(tokenId1, tokenId2, { from: user1 });
+
     // 3. Verify that the owners changed
+    assert.equal(await instance.ownerOf.call(tokenId1), user2);
+    assert.equal(await instance.ownerOf.call(tokenId2), user1);
 });
 
 it('lets a user transfer a star', async () => {
+    let instance = await StarNotary.deployed();
+    let user1 = accounts[6];
+    let user2 = accounts[7];
+    let tokenId = 9;
+
     // 1. create a Star with different tokenId
+    await instance.createStar('Useush', tokenId, { from: user1 });
+
     // 2. use the transferStar function implemented in the Smart Contract
+    await instance.transferStar(user2, tokenId, { from: user1 });
+
     // 3. Verify the star owner changed.
+    assert.equal(await instance.ownerOf.call(tokenId), user2);
 });
 
 it('lookUptokenIdToStarInfo test', async () => {
+    let instance = await StarNotary.deployed();
+    let tokenId = 10;
+
     // 1. create a Star with different tokenId
+    await instance.createStar('Wezdat', tokenId);
+
     // 2. Call your method lookUptokenIdToStarInfo
+    let starName = await instance.lookUptokenIdToStarInfo(tokenId)
+
     // 3. Verify if you Star name is the same
+    assert.equal(starName, 'Wezdat');
 });

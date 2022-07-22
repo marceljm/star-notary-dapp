@@ -23,6 +23,7 @@
   "dependencies": {
     "openzeppelin-solidity": "^4.6.0",
     "truffle-hdwallet-provider": "^1.0.17",
-    "web3": "^1.7.4"
+    "web3": "^1.7.4",
+    "webpack": "^5.73.0"
   }
 }
