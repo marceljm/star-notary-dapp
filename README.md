@@ -1,6 +1,19 @@
 # ND1309 C2 Ethereum Smart Contracts, Tokens and Dapps - Project Starter 
 **PROJECT: Decentralized Star Notary Service Project** - For this project, you will create a DApp by adding functionality with your smart contract and deploy it on the public testnet.
 
+## Additional information
+
+1) Your ERC-721 Token Name: `StarToken`
+
+2) Your ERC-721 Token Symbol: `STOK`
+
+3) Version of the Truffle and OpenZeppelin used: latest (2022-07-22), `5.5.22` and `4.6.0`
+
+4) Your Token Address on the Rinkeby Network: `0xa005bb6e059506b29ab9161de6f1d81ff3783361`
+
+[Etherscan](https://rinkeby.etherscan.io/address/0xa005bb6e059506b29ab9161de6f1d81ff3783361)
+
+
 ### ToDo
 This Starter Code has already implemented the functionalities you implemented in the StarNotary (Version 2) exercise, and have comments in all the files you need to implement your tasks.
 
@@ -23,8 +36,6 @@ npm -v
 npm uninstall -g truffle
 # Install
 npm install -g truffle
-# Specify a particular version
-npm install -g truffle@5.0.2
 # Verify the version
 truffle version
 ```
@@ -40,8 +51,8 @@ truffle version
 ```bash
 cd app
 # install packages
-npm install --save  openzeppelin-solidity@2.3
-npm install --save  truffle-hdwallet-provider@1.0.17
+npm install --save  @truffle/hdwallet-provider
+npm install --save  openzeppelin-solidity
 npm install webpack-dev-server -g
 npm install web3
 ```
@@ -76,8 +87,11 @@ truffle develop
 # For compiling the contract, inside the development console, run:
 compile
 
-# For migrating the contract to the locally running Ethereum network, inside the development console
+# For migrating the contract to the local Ethereum network
 migrate --reset
+
+# Or deploy to Rinkeby network
+migrate --reset --network rinkeby
 
 # For running unit tests the contract, inside the development console, run:
 test
@@ -85,9 +99,16 @@ test
 
 3. Frontend - Once you are ready to start your frontend, run the following from the app folder:
 ```bash
+export NODE_OPTIONS=--openssl-legacy-provider
 cd app
 npm run dev
 ```
+
+Open `http://localhost:8080/` and make sure the Metamask extension is installed, and you are logged into it.
+
+If you are using a private network, make sure you have imported the accounts.
+
+But if you are using the Rinkeby Test Network, make sure you have selected an account with balance.
 
 ---
 
@@ -98,44 +119,21 @@ When you will add a new Rinkeyby Test Network in your Metamask client, you will 
 |---|---|---|
 |Private Network 1|`http://127.0.0.1:9545/`|1337 |
 
+```json
+    development: {
+      host: "127.0.0.1",     // Localhost (default: none)
+      port: 9545,            // Standard Ethereum port (default: none)
+      network_id: "*",       // Any network (default: none)
+    },
+    rinkeby: {
+      provider: () => new HDWalletProvider(mnemonic, `https://rinkeby.infura.io/v3/${infuraKey}`),
+      network_id: 4,         // rinkeby's id
+    },
+```
+
 The chain ID above can be fetched by:
 ```bash
 cd app
 node index.js
 ```
 
-## Troubleshoot
-#### Error 1 
-```
-'webpack-dev-server' is not recognized as an internal or external command
-```
-**Solution:**
-- Delete the node_modules folder, the one within the /app folder
-- Execute `npm install` command from the /app folder
-
-After a long install, everything will work just fine!
-
-
-#### Error 2
-```
-ParserError: Source file requires different compiler version. 
-Error: Truffle is currently using solc 0.5.16, but one or more of your contracts specify "pragma solidity >=0.X.X <0.X.X".
-```
-**Solution:** In such a case, ensure the following in `truffle-config.js`:
-```js
-// Configure your compilers  
-compilers: {    
-  solc: {      
-    version: "0.5.16", // <- Use this        
-    // docker: true,
-    // ...
-```
-
-## Raise a PR or report an Issue
-1. Feel free to raise a [Pull Request](https://github.com/udacity/nd1309-p2-Decentralized-Star-Notary-Service-Starter-Code/pulls) if you find a bug/scope of improvement in the current repository. 
-
-2. If you have suggestions or facing issues, you can log in issue. 
-
----
-
-Do not use the [Old depreacted zipped starter code](https://s3.amazonaws.com/video.udacity-data.com/topher/2019/January/5c51c4c0_project-5-starter-code/project-5-starter-code.zip)

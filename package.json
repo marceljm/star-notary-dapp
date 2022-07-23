@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/marceljm/star-notary-dapp#readme",
   "dependencies": {
+    "@truffle/hdwallet-provider": "^2.0.12",
     "openzeppelin-solidity": "^4.6.0",
     "truffle-hdwallet-provider": "^1.0.17",
     "web3": "^1.7.4",
